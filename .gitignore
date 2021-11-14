@@ -1,4 +1,7 @@
-settings.py
+config.py
 .vscode/
 env/
 __pycache__/
+binance.html
+binance.py
+python.org.html
