@@ -1,6 +1,9 @@
+from types import new_class
 import requests
 from requests.exceptions import RequestException
 from bs4 import BeautifulSoup
+from datetime import date, datetime
+from webapp.model import db, News
 
 def get_html(url):
     try:
@@ -21,10 +24,17 @@ def get_python_news():
             title = news.find('a').text
             url = news.find('a')['href']
             published = news.find('time').text
-            result_news.append({
-                "title" : title,
-                "url" : url,
-                "published" : published
-            })
-        return result_news
-    return False
+            try:
+                published = datetime.strptime(published, '%Y-%m-%d')
+            except(ValueError):
+                published = datetime.now()
+            save_news(title, url, published)
+
+
+def save_news(title, url, published):
+    new_exists = News.query.filter(News.url == url).count()
+    print(new_exists)
+    if not new_exists:
+        new_news = News(title = title, url = url, published = published)
+        db.session.add(new_news)
+        db.session.commit()

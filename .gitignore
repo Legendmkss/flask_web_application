@@ -5,3 +5,4 @@ __pycache__/
 binance.html
 binance.py
 python.org.html
+*.db
